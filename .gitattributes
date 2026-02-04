@@ -1,0 +1,3 @@
+# Shell scripts and module file: LF for Linux (Lengau)
+*.sh text eol=lf
+module/* text eol=lf

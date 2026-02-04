@@ -1,0 +1,38 @@
+#%Module1.0
+##
+## CCAM (Conformal Cubic Atmospheric Model) - OneAPI 2021.3 build
+## Executable: globpea
+##
+
+proc ModulesHelp { } {
+    puts stderr "This module loads CCAM (Conformal Cubic Atmospheric Model)."
+    puts stderr "Build: Intel OneAPI 2021.3, NetCDF 4.9.2"
+    puts stderr ""
+    puts stderr "Installation: /home/apps/chpc/earth/CCAM-oneapi2021.3"
+    puts stderr ""
+    puts stderr "Usage:"
+    puts stderr "  globpea    # Main atmospheric model executable"
+    puts stderr ""
+    puts stderr "Runtime: loads NetCDF and OneAPI runtime; use mpirun for parallel runs."
+}
+
+module-whatis "CCAM (Conformal Cubic Atmospheric Model) - OneAPI 2021.3"
+
+set ccam_root "/home/apps/chpc/earth/CCAM-oneapi2021.3"
+set oneapi_base "/home/apps/chpc/compmech/compilers/intel_2021.3/oneapi"
+
+# Require NetCDF (same as build)
+if { [module-info mode load] } {
+    module load chpc/earth/netcdf/4.9.2-intel2021.3
+}
+
+setenv CCAM_ROOT $ccam_root
+prepend-path PATH $ccam_root/bin
+
+# OneAPI runtime libs (so globpea finds libifcore, libmpi, etc.)
+prepend-path LD_LIBRARY_PATH $oneapi_base/compiler/2021.3.0/linux/compiler/lib/intel64
+prepend-path LD_LIBRARY_PATH $oneapi_base/mpi/2021.3.0/lib
+prepend-path LD_LIBRARY_PATH $oneapi_base/mpi/2021.3.0/libfabric/lib
+
+puts stderr "CCAM (OneAPI 2021.3) loaded - globpea in PATH"
+puts stderr "Installation: $ccam_root"
