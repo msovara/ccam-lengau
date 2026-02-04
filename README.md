@@ -55,6 +55,19 @@ mpirun -np 24 globpea <your options>
 - [CCAM_INSTALL_AND_MODULE.md](docs/CCAM_INSTALL_AND_MODULE.md) – Install under `/home/apps/chpc/earth` and add the module file
 - [CCAM_LENGAU_BUILD_NOTES.md](docs/CCAM_LENGAU_BUILD_NOTES.md) – GCC vs OneAPI, libmvec, license notes
 
+## Publish this repo to GitHub
+
+This folder is a ready-to-push Git repo (initial commit done). To create the GitHub repository:
+
+1. On [GitHub](https://github.com/new), create a new repo named **ccam-lengau** (no README/.gitignore).
+2. From the `ccam-lengau` directory run:
+   ```bash
+   git remote add origin https://github.com/YOUR_USERNAME/ccam-lengau.git
+   git branch -M main
+   git push -u origin main
+   ```
+   See [SETUP_GITHUB.md](SETUP_GITHUB.md) for full steps.
+
 ## License and attribution
 
 - **CCAM** is developed by CSIRO. See [CSIRO CCAM](https://research.csiro.au/ccam/) and the license in the CCAM source.
