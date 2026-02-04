@@ -20,7 +20,7 @@ mpirun -np 24 globpea <your options>
 | Item | Description |
 |------|-------------|
 | **build_ccam_lengau.sh** | Build script (OneAPI + NetCDF). Run inside an interactive PBS session. |
-| **setup_ccam_lengau.sh** | Optional: clone CCAM from CSIRO Bitbucket then build. |
+| **setup_ccam_lengau.sh** | Optional: clone CCAM from GitHub (CSIRO) then build. |
 | **module/oneapi2021.3** | Environment-modules file for `chpc/earth/ccam/oneapi2021.3`. |
 | **docs/** | Step-by-step guides (download, build, install, module). |
 
@@ -46,7 +46,7 @@ mpirun -np 24 globpea <your options>
 
 - **Compiler & MPI:** Intel OneAPI 2021.3 (`/home/apps/chpc/compmech/compilers/intel_2021.3/oneapi`)
 - **NetCDF:** `chpc/earth/netcdf/4.9.2-intel2021.3`
-- **Source:** [CCAM on CSIRO Bitbucket](https://bitbucket.csiro.au/projects/CCAM/repos/ccam/browse)
+- **Source:** [CCAM on GitHub (CSIRO)](https://github.com/csiro/ccam-ccam) — clone from here for the latest release.
 
 ## Documentation
 

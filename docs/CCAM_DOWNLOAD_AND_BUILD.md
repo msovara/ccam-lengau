@@ -6,7 +6,7 @@ This guide covers downloading the latest CCAM source from CSIRO and building it 
 
 ## 1. Where CCAM lives
 
-- **Main repo (atmospheric model):** [CCAM on CSIRO Bitbucket](https://bitbucket.csiro.au/projects/CCAM/repos/ccam/browse)
+- **Source (recommended):** [CCAM on GitHub (CSIRO)](https://github.com/csiro/ccam-ccam) — latest code, GPL-3.0.
 - **Docs:** [CSIRO CCAM](https://research.csiro.au/ccam/)
 - **Requirements:** Fortran compiler (Intel recommended), MPI, NetCDF.
 
@@ -14,46 +14,16 @@ This guide covers downloading the latest CCAM source from CSIRO and building it 
 
 ## 2. Clone the latest CCAM code
 
-**On Lengau** (use a login node or a node with git and network access):
+**On the DTN node** (has internet; run `module purge` first to avoid git/libcurl issues):
 
 ```bash
-# Choose a directory for sources (e.g. under your home or lustre)
-export CCAM_SRC=/mnt/lustre/users/$USER/ccam-src
-mkdir -p $CCAM_SRC
-cd $CCAM_SRC
+cd /mnt/lustre/users/$USER/SoftwareBuilds
+# If you have an existing clone, backup then clone fresh:
+# mv ccam ccam.old
+git clone https://github.com/csiro/ccam-ccam.git ccam
 ```
 
-**Clone the main CCAM repository (GLOBPEA – atmospheric model):**
-
-```bash
-# Main model (public repo)
-git clone https://bitbucket.csiro.au/scm/CCAM/ccam.git
-cd ccam
-git pull origin master   # or main, depending on default branch
-```
-
-If the project key is lowercase on your Bitbucket:
-
-```bash
-git clone https://bitbucket.csiro.au/scm/ccam/ccam.git
-```
-
-**Optional – related CSIRO repos** (only if you need these tools):
-
-```bash
-cd $CCAM_SRC
-git clone https://bitbucket.csiro.au/scm/CCAM/terread.git
-git clone https://bitbucket.csiro.au/scm/CCAM/igbpveg.git
-git clone https://bitbucket.csiro.au/scm/CCAM/sibveg.git
-git clone https://bitbucket.csiro.au/scm/CCAM/ocnbath.git
-git clone https://bitbucket.csiro.au/scm/CCAM/casafield.git
-git clone https://bitbucket.csiro.au/scm/CCAM/cdfvidar.git
-git clone https://bitbucket.csiro.au/scm/CCAM/aeroemiss.git
-git clone https://bitbucket.csiro.au/scm/CCAM/pcc2hist.git
-git clone https://bitbucket.csiro.au/scm/CCAM/scripts.git
-```
-
-Use the same pattern (CCAM vs ccam) as for the main `ccam` clone if one fails.
+This puts the source in `/mnt/lustre/users/$USER/SoftwareBuilds/ccam`. The build script expects `CCAM_SRC` to point at this directory (default: same path).
 
 ---
 

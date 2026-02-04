@@ -6,7 +6,7 @@
 set -e
 
 CCAM_SRC="${CCAM_SRC:-/mnt/lustre/users/$USER/SoftwareBuilds/ccam}"
-CCAM_REPO="${CCAM_REPO:-https://bitbucket.csiro.au/scm/CCAM/ccam.git}"
+CCAM_REPO="${CCAM_REPO:-https://github.com/csiro/ccam-ccam.git}"
 
 echo "CCAM_SRC=$CCAM_SRC"
 echo ""
@@ -17,12 +17,7 @@ cd "$CCAM_SRC"
 
 if [[ ! -d ccam ]]; then
   echo "Cloning CCAM from $CCAM_REPO ..."
-  if git clone "$CCAM_REPO" ccam; then
-    echo "Clone OK."
-  else
-    echo "Trying lowercase project name..."
-    git clone https://bitbucket.csiro.au/scm/ccam/ccam.git ccam
-  fi
+  git clone "$CCAM_REPO" ccam
 else
   echo "ccam/ already exists; pulling latest."
   cd ccam

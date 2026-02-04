@@ -44,7 +44,7 @@ echo ""
 
 if [[ ! -d "$CCAM_SRC" ]]; then
   echo "ERROR: CCAM source not found at $CCAM_SRC"
-  echo "Clone CCAM first (e.g. on DTN: module purge; git clone https://bitbucket.csiro.au/scm/CCAM/ccam.git $CCAM_SRC)"
+  echo "Clone CCAM first (e.g. on DTN: module purge; git clone https://github.com/csiro/ccam-ccam.git $CCAM_SRC)"
   exit 1
 fi
 
