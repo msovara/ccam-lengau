@@ -12,17 +12,22 @@ module load chpc/earth/ccam/oneapi2021.3
 mpirun -np 24 globpea <your options>
 ```
 
-- **Installation:** `/home/apps/chpc/earth/CCAM-oneapi2021.3`
-- **Executable:** `globpea`
+- **Installation:** `/home/apps/chpc/earth/CCAM-oneapi2021.3/bin/`
+- **Main executable:** `globpea`
+- **Full suite:** terread, igbpveg, cdfvidar, pcc2hist, aeroemiss, ocnbath, casafield, g2n, sibveg, … (see [CCAM_FULL_SUITE.md](docs/CCAM_FULL_SUITE.md))
+
+**Note:** If only `globpea` is present, build the full suite with `build_ccam_suite_lengau.sh` (after `download_ccam_suite_dtn.sh` on the DTN).
 
 ## Contents of this repo
 
 | Item | Description |
 |------|-------------|
-| **build_ccam_lengau.sh** | Build script (OneAPI + NetCDF). Run inside an interactive PBS session. |
-| **setup_ccam_lengau.sh** | Optional: clone CCAM from GitHub (CSIRO) then build. |
+| **build_ccam_lengau.sh** | Build **globpea** only (OneAPI). Interactive PBS session. |
+| **build_ccam_suite_lengau.sh** | Build **full suite** (all tools). Interactive PBS or `run_build_ccam_suite.pbs`. |
+| **download_ccam_suite_dtn.sh** | Clone all repos on DTN (`module purge` first). |
+| **setup_ccam_lengau.sh** | Optional: clone main CCAM only. |
 | **module/oneapi2021.3** | Environment-modules file for `chpc/earth/ccam/oneapi2021.3`. |
-| **docs/** | Step-by-step guides (download, build, install, module). |
+| **docs/** | Guides including [CCAM_FULL_SUITE.md](docs/CCAM_FULL_SUITE.md). |
 
 ## Building from source (Lengau)
 
