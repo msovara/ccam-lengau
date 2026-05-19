@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -N g2n_deps
+#PBS -l select=1:ncpus=24:mpiprocs=24:nodetype=haswell_reg
+#PBS -l walltime=01:00:00
+#PBS -P RCHPC
+#PBS -q internal
+#PBS -W group_list=chpc_staff
+#PBS -j oe
+#PBS -o g2n_deps_build.log
+
+cd ${PBS_O_WORKDIR:-/mnt/lustre/users/msovara/SoftwareBuilds}
+export SUITE_SRC=/mnt/lustre/users/msovara/SoftwareBuilds/ccam-suite
+
+module purge
+source /home/apps/chpc/compmech/compilers/intel_2021.3/oneapi/compiler/2021.3.0/env/vars.sh
+source /home/apps/chpc/compmech/compilers/intel_2021.3/oneapi/mpi/2021.3.0/env/vars.sh
+module load chpc/earth/netcdf/4.9.2-intel2021.3
+
+./build_g2n_deps_lengau.sh

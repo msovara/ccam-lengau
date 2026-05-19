@@ -48,6 +48,17 @@ clone_github ccam-ocnbath    ocnbath
 clone_github ccam-casafield  casafield
 clone_github ccam-g2n        g2n
 
+# g2n dependencies (Jasper uses WRF tree on Lengau; g2lib from NOAA on DTN)
+G2N_DEPS="${SUITE_SRC}/src/g2nlib"
+mkdir -p "$G2N_DEPS"
+if [[ ! -d "$G2N_DEPS/NCEPLIBS-g2/.git" ]]; then
+  echo "Cloning NCEPLIBS-g2 (g2_v3.1.0) for g2n"
+  git clone --depth 1 --branch g2_v3.1.0 \
+    https://github.com/NOAA-EMC/NCEPLIBS-g2.git "$G2N_DEPS/NCEPLIBS-g2"
+fi
+mkdir -p "$G2N_DEPS/g2lib-3.1.0"
+cp -a "$G2N_DEPS/NCEPLIBS-g2/src/." "$G2N_DEPS/g2lib-3.1.0/"
+
 # sibveg: try GitHub then Bitbucket
 if [[ ! -d sibveg ]]; then
   if ! git clone --depth 1 https://github.com/csiro/ccam-sibveg.git sibveg 2>/dev/null; then

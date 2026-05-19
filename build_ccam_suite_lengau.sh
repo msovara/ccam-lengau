@@ -92,11 +92,19 @@ build_mpi() {
   fi
 }
 
+# g2n needs Jasper + NCEP g2lib under $SUITE_SRC/src/ (see build_g2n_deps_lengau.sh)
+build_g2n_deps() {
+  local script_dir
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  "$script_dir/build_g2n_deps_lengau.sh"
+}
+
 # Order matches legacy ccam_compile.sh
 build_mpi ccam globpea
 build_serial aeroemiss aeroemiss
 build_mpi pcc2hist pcc2hist
 build_serial cdfvidar cdfvidar
+build_g2n_deps
 build_serial g2n g2n
 build_serial igbpveg igbpveg
 build_serial terread terread

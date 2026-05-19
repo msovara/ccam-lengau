@@ -1,0 +1,16 @@
+#!/bin/bash
+#PBS -N ccam_suite_resume
+#PBS -l select=1:ncpus=24:mpiprocs=24:nodetype=haswell_reg
+#PBS -l walltime=12:00:00
+#PBS -P RCHPC
+#PBS -q internal
+#PBS -W group_list=chpc_staff
+#PBS -j oe
+#PBS -o ccam_suite_resume.log
+
+cd ${PBS_O_WORKDIR:-/mnt/lustre/users/msovara/SoftwareBuilds}
+export SUITE_SRC=/mnt/lustre/users/msovara/SoftwareBuilds/ccam-suite
+export CCAM_SRC=/mnt/lustre/users/msovara/SoftwareBuilds/ccam
+export INSTALL_BIN=/home/apps/chpc/earth/CCAM-oneapi2021.3/bin
+
+bash ./build_ccam_suite_resume_lengau.sh

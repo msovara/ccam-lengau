@@ -1,66 +1,74 @@
 # CCAM on CHPC Lengau
 
-Build and module setup for the **Conformal Cubic Atmospheric Model (CCAM)** on the CHPC Lengau cluster, using **Intel OneAPI** (no license required).
+Build scripts and user documentation for the **Conformal Cubic Atmospheric Model (CCAM)** on the CHPC Lengau cluster, using **Intel OneAPI 2021.3** (no separate Intel license required for this toolchain).
 
-## Quick start (use pre-installed module)
+**Repository:** [github.com/msovara/ccam-lengau](https://github.com/msovara/ccam-lengau)
 
-On Lengau:
+---
+
+## For users (running CCAM)
 
 ```bash
 module load chpc/earth/ccam/oneapi2021.3
-# In a PBS job:
-mpirun -np 24 globpea <your options>
+which globpea
+echo $CCAM_ROOT $CCAM_DATA $VEGIN
 ```
 
-- **Installation:** `/home/apps/chpc/earth/CCAM-oneapi2021.3/bin/`
-- **Main executable:** `globpea`
-- **Full suite:** terread, igbpveg, cdfvidar, pcc2hist, aeroemiss, ocnbath, casafield, g2n, sibveg, … (see [CCAM_FULL_SUITE.md](docs/CCAM_FULL_SUITE.md))
+| What | Where |
+|------|--------|
+| **Executables** | `/home/apps/chpc/earth/CCAM-oneapi2021.3/bin/` |
+| **Static data (vegin, ccamdata)** | `/home/apps/chpc/earth/CCAM/ccaminstall/` via `$CCAM_DATA` |
 
-**Note:** If only `globpea` is present, build the full suite with `build_ccam_suite_lengau.sh` (after `download_ccam_suite_dtn.sh` on the DTN).
+**Read first:** [docs/CCAM_USER_GUIDE.md](docs/CCAM_USER_GUIDE.md) — module usage, full tool list, static data policy (CHPC vs user), PBS notes, legacy vs OneAPI.
 
-## Contents of this repo
+**Installed tools (OneAPI):** `globpea`, `terread`, `igbpveg`, `sibveg`, `ocnbath`, `casafield`, `aeroemiss`, `cdfvidar`, `pcc2hist`, `g2n`.
 
-| Item | Description |
-|------|-------------|
-| **build_ccam_lengau.sh** | Build **globpea** only (OneAPI). Interactive PBS session. |
-| **build_ccam_suite_lengau.sh** | Build **full suite** (all tools). Interactive PBS or `run_build_ccam_suite.pbs`. |
-| **download_ccam_suite_dtn.sh** | Clone all repos on DTN (`module purge` first). |
-| **setup_ccam_lengau.sh** | Optional: clone main CCAM only. |
-| **module/oneapi2021.3** | Environment-modules file for `chpc/earth/ccam/oneapi2021.3`. |
-| **docs/** | Guides including [CCAM_FULL_SUITE.md](docs/CCAM_FULL_SUITE.md). |
+**Static data** (~20 GB vegin + ccamdata) is **shared CHPC data**, not part of the compile. Users reference `$CCAM_DATA` / `$VEGIN`; they do not need to copy vegin into their home directory unless their experiment requires it.
 
-## Building from source (Lengau)
+**smclim** is not in the public suite build; see the user guide for the legacy binary path if needed.
 
-1. **Clone CCAM** on the DTN node (has internet):  
-   See [CCAM_DOWNLOAD_AND_BUILD.md](docs/CCAM_DOWNLOAD_AND_BUILD.md) or run `setup_ccam_lengau.sh` (with `module purge` first on DTN).
+Run **globpea** only inside **PBS jobs** with `mpirun`, not on the login node.
 
-2. **Get an interactive session** and build:
-   ```bash
-   qsub -I -l select=1:ncpus=24:mpiprocs=24:nodetype=haswell_reg -l walltime=12:00:00 -P RCHPC -q internal -W group_list=chpc_staff -X
-   ```
-   When the job starts:
-   ```bash
-   cd /mnt/lustre/users/$USER/SoftwareBuilds/ccam
-   ./build_ccam_lengau.sh
-   ```
+---
 
-3. **Install and module:**  
-   See [CCAM_INSTALL_AND_MODULE.md](docs/CCAM_INSTALL_AND_MODULE.md).
+## For maintainers (building / updating the install)
 
-## Toolchain
+| Script | Purpose |
+|--------|---------|
+| `download_ccam_suite_dtn.sh` | Clone sources on DTN (`module purge` first) |
+| `build_ccam_lengau.sh` | Build **globpea** only (interactive PBS) |
+| `build_ccam_suite_lengau.sh` | Build full suite (+ `build_g2n_deps_lengau.sh` for g2n) |
+| `build_g2n_deps_lengau.sh` | Jasper + NCEP g2lib for **g2n** |
+| `run_build_ccam_suite.pbs` | PBS batch full suite |
+| `module/oneapi2021.3` | Environment module → install under `/apps/chpc/scripts/modules/earth/ccam/` |
 
-- **Compiler & MPI:** Intel OneAPI 2021.3 (`/home/apps/chpc/compmech/compilers/intel_2021.3/oneapi`)
-- **NetCDF:** `chpc/earth/netcdf/4.9.2-intel2021.3`
-- **Source:** [CCAM on GitHub (CSIRO)](https://github.com/csiro/ccam-ccam) — clone from here for the latest release.
+**Install layout**
+
+```text
+/home/apps/chpc/earth/CCAM-oneapi2021.3/     # CCAM_ROOT — binaries only
+/home/apps/chpc/earth/CCAM/ccaminstall/     # CCAM_DATA — shared static data (vegin, ccamdata, …)
+```
+
+**Toolchain:** OneAPI 2021.3 + `chpc/earth/netcdf/4.9.2-intel2021.3`  
+**Model source:** [csiro/ccam-ccam](https://github.com/csiro/ccam-ccam) and related `ccam-*` repos on GitHub.
+
+---
 
 ## Documentation
 
-- [CCAM_DOWNLOAD_AND_BUILD.md](docs/CCAM_DOWNLOAD_AND_BUILD.md) – Download and build (OneAPI, optional licensed Intel)
-- [RUN_CCAM_BUILD_IN_TERMINAL.md](docs/RUN_CCAM_BUILD_IN_TERMINAL.md) – Copy-paste commands for your terminal
-- [CCAM_INSTALL_AND_MODULE.md](docs/CCAM_INSTALL_AND_MODULE.md) – Install under `/home/apps/chpc/earth` and add the module file
-- [CCAM_LENGAU_BUILD_NOTES.md](docs/CCAM_LENGAU_BUILD_NOTES.md) – GCC vs OneAPI, libmvec, license notes
+| Document | Audience |
+|----------|----------|
+| [CCAM_USER_GUIDE.md](docs/CCAM_USER_GUIDE.md) | **End users** — module, data, workflows |
+| [CCAM_FULL_SUITE.md](docs/CCAM_FULL_SUITE.md) | Full suite build steps |
+| [CCAM_DOWNLOAD_AND_BUILD.md](docs/CCAM_DOWNLOAD_AND_BUILD.md) | Download and build |
+| [CCAM_INSTALL_AND_MODULE.md](docs/CCAM_INSTALL_AND_MODULE.md) | Install path and module file |
+| [CCAM_LENGAU_BUILD_NOTES.md](docs/CCAM_LENGAU_BUILD_NOTES.md) | GCC vs OneAPI, licenses |
+| [RUN_CCAM_BUILD_IN_TERMINAL.md](docs/RUN_CCAM_BUILD_IN_TERMINAL.md) | Copy-paste commands |
+
+---
 
 ## License and attribution
 
-- **CCAM** is developed by CSIRO. See [CSIRO CCAM](https://research.csiro.au/ccam/) and the license in the CCAM source.
-- This repository only contains build/install scripts and module files for CHPC Lengau.
+CCAM is developed by **CSIRO**. See [CSIRO CCAM](https://research.csiro.au/ccam/) and the license in the source repositories.
+
+This repository contains CHPC Lengau **build/install scripts and documentation** only, not the model source code.

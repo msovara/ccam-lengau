@@ -46,9 +46,26 @@ which globpea
 ```bash
 module purge
 module load chpc/earth/ccam/oneapi2021.3
-which globpea
-# Run in a PBS job with mpirun, not on login node
+which globpea g2n terread
+echo $CCAM_ROOT $CCAM_DATA $VEGIN
+# Run globpea in a PBS job with mpirun, not on login node
 ```
+
+---
+
+## 4. Static data (shared — not copied into CCAM-oneapi2021.3)
+
+Executables live under **CCAM-oneapi2021.3**. Large input datasets stay in the existing **ccaminstall** tree (~20 GB **vegin**). The module sets:
+
+| Variable | Path |
+|----------|------|
+| `CCAM_DATA` | `/home/apps/chpc/earth/CCAM/ccaminstall` |
+| `VEGIN` | `$CCAM_DATA/vegin` |
+
+Users should reference these variables in namelists/scripts. Do not duplicate vegin into each build unless required. See [CCAM_USER_GUIDE.md](CCAM_USER_GUIDE.md).
+
+Download scripts (if data are missing):  
+`/home/apps/chpc/earth/CCAM/ccaminstall/CCAM_Download_scripts/`
 
 ---
 
@@ -56,7 +73,9 @@ which globpea
 
 | Item | Value |
 |------|--------|
-| Install dir | `/home/apps/chpc/earth/CCAM-oneapi2021.3` |
-| Executable | `$CCAM_ROOT/bin/globpea` |
+| Install dir (binaries) | `/home/apps/chpc/earth/CCAM-oneapi2021.3` |
+| Static data | `/home/apps/chpc/earth/CCAM/ccaminstall` (`$CCAM_DATA`) |
+| Main executable | `$CCAM_ROOT/bin/globpea` |
 | Module load | `module load chpc/earth/ccam/oneapi2021.3` |
 | Module file in repo | `module/oneapi2021.3` |
+| User guide | [CCAM_USER_GUIDE.md](CCAM_USER_GUIDE.md) |

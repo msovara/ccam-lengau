@@ -1,0 +1,34 @@
+#!/bin/bash
+#PBS -N ccam_remainder
+#PBS -l select=1:ncpus=24:mpiprocs=24:nodetype=haswell_reg
+#PBS -l walltime=02:00:00
+#PBS -P RCHPC
+#PBS -q internal
+#PBS -W group_list=chpc_staff
+#PBS -j oe
+#PBS -o ccam_remainder.log
+
+cd /mnt/lustre/users/msovara/SoftwareBuilds || exit 1
+export SUITE_SRC=/mnt/lustre/users/msovara/SoftwareBuilds/ccam-suite
+export INSTALL_BIN=/home/apps/chpc/earth/CCAM-oneapi2021.3/bin
+
+{
+  echo "START $(date)"
+  module purge
+  source /home/apps/chpc/compmech/compilers/intel_2021.3/oneapi/compiler/2021.3.0/env/vars.sh
+  source /home/apps/chpc/compmech/compilers/intel_2021.3/oneapi/mpi/2021.3.0/env/vars.sh
+  module load chpc/earth/netcdf/4.9.2-intel2021.3
+  export PATH=/home/apps/chpc/compmech/compilers/intel_2021.3/oneapi/compiler/2021.3.0/linux/bin/intel64:$PATH
+  NETCDF_PREFIX=$(nc-config --prefix)
+  for pair in igbpveg:igbpveg ocnbath:ocnbath sibveg:sibveg; do
+    d=${pair%%:*}; exe=${pair##*:}
+    [ -x "$INSTALL_BIN/$exe" ] && echo "SKIP $exe" && continue
+    echo "BUILD $exe"
+    cd "$SUITE_SRC/$d" || continue
+    make clean 2>/dev/null || true
+    [ -f netcdf_m.f90 ] && make FC=ifort NETCDF_ROOT="$NETCDF_PREFIX" netcdf_m.o 2>/dev/null || true
+    make FC=ifort NETCDF_ROOT="$NETCDF_PREFIX" && cp -f "$exe" "$INSTALL_BIN/" && echo "OK $exe" || echo "FAIL $exe"
+  done
+  ls -la "$INSTALL_BIN"
+  echo "END $(date)"
+} >> ccam_remainder.log 2>&1
